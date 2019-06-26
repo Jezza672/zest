@@ -1,4 +1,4 @@
-from .base import Test_Base, Decorator_Base
+from .base import Decorator_Base
 
 
 class Tests(Decorator_Base):
@@ -11,7 +11,7 @@ class Tests(Decorator_Base):
         func (function): the function this will test.'''
     
     def _handle_function_that_tests(self, function):
-        self.function = function
+        self.decorated_function = function
         self.call = super().call
         return self
         
@@ -21,9 +21,10 @@ class Tests(Decorator_Base):
         self.call = self._handle_function_that_tests
 
     def _test(self):
-        return self.function(self.function_to_test)
+        return self.decorated_function(self.function_to_test)
     
     def __str__(self):
         module = self.function_to_test.__module__
         name = self.function_to_test.__name__
-        return f"Test for '{module}.{name}'"
+        self_name = self.decorated_function.__name__
+        return f"Test '{self_name}' for '{module}.{name}'"

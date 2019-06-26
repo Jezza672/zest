@@ -1,4 +1,4 @@
-from zest import Tests, raises, Testable
+from zest import Tests, raises, Testable, test
 import main
 
 @Tests(main.squared)
@@ -19,4 +19,14 @@ print(test_squared())
 @Testable
 def example(x : int, y : int) -> int:
     return x + y
+
+@example.test
+def test1(example):
+    assert example(5, 7) == 12
+
+@example.test
+def test2(example):
+    assert example(3, 4) == 7
+
+print(test(example))
 

@@ -1,42 +1,40 @@
 from .result import Results
-from .test import Test
+from .base import Decorator_Base
 from .tests import Tests
 
 
-class Testable:
-    def __init__(self, func = None):
-        def decorator(func):
-            self.func = func
-            self.__name__ = func.__name__
-            self.__module__ = func.__module__
-            def inner(*args, **kwargs):
-                return self.func(*args, **kwargs)
-            return inner
-
-        if func is None:
-            self.call = decorator
-        else:
-            self.call = decorator(func)
-        
+class Testable(Decorator_Base):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.tests = []
+    
+    def test(self, function = None):
+        def create_test(function):
+            test = Tests(self)(function)
+            self.tests.append(test)
+            return test
+        
+        if function:
+            return create_test(function)
+        else:
+            return create_test
+
+    def handle_function(self, function):
+        super().handle_function(function)
+        self.__name__ = function.__name__
+        self.__module__ = function.__module__
 
     def __call__(self, *args, **kwargs):
-        return self.call(*args, **kwargs)
-        
-    def test(self, test_func):
-        test_object = Tests(self.func)(test_func)
-        self.tests.append(test_object)
-        return test_object
-    
-    def run(self):
+        return self.decorated_function(*args, **kwargs)
+ 
+    def __test__(self):
         out = Results()
-        out.name = f"Tests for {self.func.__module__}.{self.func.__name__}:"
         for test in self.tests:
             out.append(test())
         return out
-    
+
     def __repr__(self):
-        return f"<Testable funcion: {repr(self.func)}>"
+        return f"<Testable funcion: {repr(self.decorated_function)}>"
     
     def __str__(self):
-        return f"Testable function {self.func.__name__}"
+        return f"Testable function {self.decorated_function.__name__}"
