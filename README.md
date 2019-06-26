@@ -1,4 +1,4 @@
-# Project Title
+# Zest
 
 A lightweight decorator based testing package for Python 3.5+.
 
