@@ -1,3 +1,9 @@
-from zest.tests import tests
-from zest.utility import raises
-from zest.all_tests import test_all
+from zest.tests import *
+from zest.utility import *
+from zest.test import *
+from zest.testable import *
+from zest.result import *
+
+verbose = True
+
+test_list = []
