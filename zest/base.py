@@ -1,21 +1,20 @@
 from time import time
 from typing import Callable
 
-from . import test_list
 from .result import Result
 
+all_tests = []
 
 class Test_Base:
     """Virtual class that defines the pre-requisites that a test must fulfil"""
 
     def __init__(self):
-        self._test = self._default
-        test_list.append(self)
+        all_tests.append(self)
 
-    def _default(self):
+    def _test(self) -> bool:
         raise NotImplementedError("Test function not implemented")
 
-    def __call__(self, *args, **kwargs):
+    def call(self, *args, **kwargs) -> Result:
         try:
             t_start = time()
             self._test(*args, **kwargs)
@@ -24,6 +23,9 @@ class Test_Base:
         except Exception as e:
             self.result = Result(self, False, e)
         return self.result
+
+    def __call__(self, *args, **kwargs):
+        return self.call(*args, **kwargs)
 
     def __str__(self):
         return "Test"
@@ -34,9 +36,9 @@ class Decorator_Base(Test_Base):
     def __init__(self, func = None, **kwargs):
 
         def function_in(function):
-            self.__call__ = super().__call__
+            self.call = super().call
             self.handle_function(function)
-         
+            return self
         # If the decorator was applied without brackets after,
         # the function it decorates will be passed as the only
         # argument to the constructor
@@ -47,7 +49,7 @@ class Decorator_Base(Test_Base):
         # the decorator will still need to take in a function
         # the first time it is called
         else: 
-            self.__call__ = function_in
+            self.call = function_in
 
             # If the decorator was called with keyword arguments for
             # initialisation, run the initialisation with those
@@ -68,7 +70,7 @@ class Decorator_Base(Test_Base):
 
     def handle_function(self, function : Callable):
         """Default function handler"""
-        self.function = function
+        self.decorated_function = function
         
         
         

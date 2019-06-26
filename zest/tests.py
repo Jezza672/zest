@@ -1,20 +1,29 @@
-from .test import Test
+from .base import Test_Base, Decorator_Base
 
 
-class Tests(Test):
+class Tests(Decorator_Base):
     '''A decorator that takes a function to test, registers it, and sets up the test.
     
-    function_to_test - The function that will be passed to the testing function when the test is run.'''
-    def __init__(self, function_to_test):
-        super().__init__(None)
-        self.func = function_to_test
+    The function that is being tested will be passed to the testing function as it's
+    only argument.
+    
+    Args:
+        func (function): the function this will test.'''
+    
+    def _handle_function_that_tests(self, function):
+        self.function = function
+        self.call = super().call
+        return self
+        
+    def handle_function(self, function):
+        """Override to take in the function to test first, then the functiont that tests it."""
+        self.function_to_test = function
+        self.call = self._handle_function_that_tests
+
+    def _test(self):
+        return self.function(self.function_to_test)
     
     def __str__(self):
-        return f"Test for '{self.func.__module__}.{self.func.__name__}'"
-
-    def __call__(self, test_func):
-        self.test_function = test_func
-        return self.run
-
-    def run(self):
-        return super().run(self.func)
+        module = self.function_to_test.__module__
+        name = self.function_to_test.__name__
+        return f"Test for '{module}.{name}'"

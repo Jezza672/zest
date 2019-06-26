@@ -1,6 +1,5 @@
 from zest import Testable
 
-@Testable
 def squared(x):
     return x*x
 
