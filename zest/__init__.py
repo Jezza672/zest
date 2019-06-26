@@ -2,6 +2,10 @@ from zest.base import *
 from zest.result import *
 from zest.testable import *
 from zest.tests import *
-from zest.utility import *
 
-verbose = True
+def raises(error, function, *args, **kwargs):
+    try:
+        function(*args, **kwargs)
+    except error:
+        return True
+    return False
