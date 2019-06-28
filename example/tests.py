@@ -1,4 +1,4 @@
-from zest import Tests, raises, Testable, test
+from zest import Tests, raises, Testable, test, test_all
 import main
 
 @Tests(main.squared)
@@ -28,5 +28,5 @@ def test1(example):
 def test2(example):
     assert example(3, 4) == 7
 
-print(test(example))
+print(test_all())
 

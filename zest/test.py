@@ -5,4 +5,4 @@ class Test(Decorator_Base):
         return self.decorated_function()
 
     def __str__(self):
-        return f"Test: '{self.decorated_function.__name__}'"
+        return f"Test '{self.decorated_function.__name__}'"

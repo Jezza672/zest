@@ -1,7 +1,8 @@
-from zest.base import *
-from zest.result import *
-from zest.testable import *
-from zest.tests import *
+from .base import *
+from .result import *
+from .testable import *
+from .tests import *
+from .all_tests import *
 
 def raises(error, function, *args, **kwargs):
     try:

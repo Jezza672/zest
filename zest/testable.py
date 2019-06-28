@@ -1,4 +1,4 @@
-from .result import Results
+from .results import Results
 from .base import Decorator_Base
 from .tests import Tests
 
@@ -11,6 +11,7 @@ class Testable(Decorator_Base):
     def test(self, function = None):
         def create_test(function):
             test = Tests(self)(function)
+            #all_tests.remove(test)
             self.tests.append(test)
             return test
         
@@ -28,7 +29,7 @@ class Testable(Decorator_Base):
         return self.decorated_function(*args, **kwargs)
  
     def __test__(self):
-        out = Results()
+        out = Results(f"Test group for '{self.__module__}.{self.__name__}':")
         for test in self.tests:
             out.append(test())
         return out

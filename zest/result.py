@@ -34,26 +34,3 @@ class Result:
     
     def __eq__(self, other):
         return other and self.passed
-
-class Results(list):
-    name = ""
-    def __setitem__(self, key, item):
-        if isinstance(item, Result):
-            return list.__setitem__(self, key, item)
-        else:
-            raise TypeError("Result lists only accept test results as members.")
-
-    def pretty(self, pre = ""):
-        string = pre
-        joiner = "\n" + pre
-        if self.name != "":
-            string += self.name + joiner
-            pre += "\t"
-        string += joiner.join(item.pretty(pre) for item in self)
-        return string
-
-    def pretty_print(self, pre = ""):
-        print(self.pretty(pre))
-
-    def __str__(self):
-        return self.pretty()

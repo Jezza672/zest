@@ -2,19 +2,18 @@ from time import time
 from typing import Callable
 
 from .result import Result
+from zest.all_tests import all_tests, test
 
-all_tests = []
 
-def test(obj):
-    return obj.__test__()
 
 class Test_Base:
     """Virtual class that defines the pre-requisites that a test must fulfil"""
-
     def __init__(self):
         all_tests.append(self)
+        print(len(all_tests))
 
     def __test__(self, *args, **kwargs):
+        print(self)
         try:
             t_start = time()
             self._test(*args, **kwargs)
