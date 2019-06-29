@@ -22,7 +22,7 @@ class Testable(Decorator_Base, Test_List):
         super().handle_function(function)
         self.__name__ = function.__name__
         self.__module__ = function.__module__
-        self.result_string = f"Test group for '{self.__module__}.{self.__name__}':"
+        self.result_string = f"Test group for '{self.__module__}.{self.__name__}'"
 
     __test__ = Test_List.__test__
 

@@ -33,7 +33,10 @@ class Test_Base:
         return "Test"
 
 class Test_List(list):
-    result_string = "Test Group:"
+    def __init__(self, result_string : str = "Test Group"):
+        list.__init__(self)
+        self.result_string = result_string
+
     def __setitem__(self, key, item):
         if isinstance(item, (Test_List, Test_Base)):
             super().__setitem__(key, item)
@@ -62,7 +65,7 @@ class Test_List(list):
             out.append(test.__test__())
         return out
 
-all_tests = Test_List()
+all_tests = Test_List("All tests")
 
 class Decorator_Base(Test_Base):
     """Virtual class that defines a test created using a decorator"""

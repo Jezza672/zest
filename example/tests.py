@@ -13,6 +13,8 @@ def test_squared(func = main.squared):
     assert raises(TypeError, func, "NaN"), "Should raise TypeError when 'NaN' supplied"
     assert raises(TypeError, func, {1, 2, 3}), "Should raise Ty5peError when {1, 2, 3} supplied"
 
+    raise ValueError("YEllow")
+
 
 @Testable
 def example(x : int, y : int) -> int:

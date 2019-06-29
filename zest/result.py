@@ -5,7 +5,7 @@ class Result:
         self.error = error
         self.time = time
     
-    def pretty(self, pre = "", verbose = True):
+    def pretty(self, pre : str = "", verbose = True):
         if self.passed:
             if self.time is not None:
                 millis = self.time * 1000
@@ -23,16 +23,16 @@ class Result:
             res = "Failed"
         return f"{pre}{self.test}: {res}"
 
-    def pretty_print(self, pre = ""):
+    def pretty_print(self, pre : str = ""):
         print(self.pretty(pre))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.pretty()
     
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return self.passed
     
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return other and self.passed
 
 
@@ -40,38 +40,33 @@ class Results(list, Result):
     def __init__(self, pre_text):
         list.__init__(self)
         self.pre_text = pre_text
+        self.failed = 0
         self.passed = True
-        self.error = None
         self.time = 0
-        self.test = "Test"
 
-    def __setitem__(self, key, item : Result):
-        if isinstance(item, (Result)):
-            list.__setitem__(self, key, item)
-            
+    def append(self, item):
+        if isinstance(item, Result):
+            list.append(self, item)
+
             if not item.passed:
                 self.passed = False
-            
-            if item.error:
-                self.error = item.error
+                self.failed += 1
             
             if item.time:
                 self.time += item.time
         else:
             raise TypeError("Result lists only accept test results as members.")
 
-    def pretty(self, pre = "") -> str:
+    def pretty(self, pre : str = "") -> str:
         string = pre
         joiner = "\n" + pre
-        string += self.pre_text + joiner
+        if not self.passed:
+            self.error = AssertionError(f"{len(self) - self.failed}/{len(self)} passed.")
+        self.test = f"{self.pre_text} - {len(self)} tests" 
+        string += Result.pretty(self) + joiner
         pre += "\t"
         string += joiner.join(item.pretty(pre) for item in self)
-        string += joiner
-        string += Result.pretty(self)
         return string
-
-    def pretty_print(self, pre : str  = ""):
-        print(self.pretty(pre))
 
     def __str__(self) -> str:
         return self.pretty()
