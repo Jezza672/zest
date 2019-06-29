@@ -34,3 +34,44 @@ class Result:
     
     def __eq__(self, other):
         return other and self.passed
+
+
+class Results(list, Result):
+    def __init__(self, pre_text):
+        list.__init__(self)
+        self.pre_text = pre_text
+        self.passed = True
+        self.error = None
+        self.time = 0
+        self.test = "Test"
+
+    def __setitem__(self, key, item : Result):
+        if isinstance(item, (Result)):
+            list.__setitem__(self, key, item)
+            
+            if not item.passed:
+                self.passed = False
+            
+            if item.error:
+                self.error = item.error
+            
+            if item.time:
+                self.time += item.time
+        else:
+            raise TypeError("Result lists only accept test results as members.")
+
+    def pretty(self, pre = "") -> str:
+        string = pre
+        joiner = "\n" + pre
+        string += self.pre_text + joiner
+        pre += "\t"
+        string += joiner.join(item.pretty(pre) for item in self)
+        string += joiner
+        string += Result.pretty(self)
+        return string
+
+    def pretty_print(self, pre : str  = ""):
+        print(self.pretty(pre))
+
+    def __str__(self) -> str:
+        return self.pretty()

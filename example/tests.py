@@ -1,4 +1,4 @@
-from zest import Tests, raises, Testable, test, test_all
+from zest import Tests, raises, Testable, all_tests, test
 import main
 
 @Tests(main.squared)
@@ -13,8 +13,6 @@ def test_squared(func = main.squared):
     assert raises(TypeError, func, "NaN"), "Should raise TypeError when 'NaN' supplied"
     assert raises(TypeError, func, {1, 2, 3}), "Should raise Ty5peError when {1, 2, 3} supplied"
 
-print(test_squared())
-
 
 @Testable
 def example(x : int, y : int) -> int:
@@ -28,5 +26,5 @@ def test1(example):
 def test2(example):
     assert example(3, 4) == 7
 
-print(test_all())
+print(test(all_tests))
 
