@@ -2,6 +2,7 @@ from .base import *
 from .result import *
 from .testable import *
 from .tests import *
+from .test import *
 
 def raises(error, function, *args, **kwargs):
     try:

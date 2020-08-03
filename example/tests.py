@@ -1,9 +1,9 @@
-from zest import Tests, raises, Testable, all_tests, test
+from zest import Tests, raises, Testable, all_tests, test, Test
 import main
 
 @Tests(main.squared)
 def test_squared(func = main.squared):
-    """Ensure squaring is done accureately and only squarable types are squared"""
+    """Ensure squaring is done accurately and only squarable types are squared"""
 
     # Make sure correct values are created
     assert func(4) == 16, f"4^2 is 16, received {func(4)}"
@@ -11,20 +11,20 @@ def test_squared(func = main.squared):
 
     # Make sure ValueError is thrown if invalid inputs are given
     assert raises(TypeError, func, "NaN"), "Should raise TypeError when 'NaN' supplied"
-    assert raises(TypeError, func, {1, 2, 3}), "Should raise Ty5peError when {1, 2, 3} supplied"
+    assert raises(TypeError, func, {1, 2, 3}), "Should raise TypeError when {1, 2, 3} supplied"
 
+# main.summed was decorated with @Testable to enable the following:
+@main.summed.test
+def test1(summed):
+    assert summed(5, 7) == 12, f"Incorrect result, should give 12, gave {summed(5, 7)}"
 
-@Testable
-def example(x : int, y : int) -> int:
-    return x + y
+@main.summed.test
+def test2(summed):
+    assert summed(3, 4) == 7, f"Incorrect result, should give 7, gave {summed(3, 4)}"
 
-@example.test
-def test1(example):
-    assert example(5, 7) == 12, f"Incorrect result, should give 12, gave {example(5, 7)}"
+@Test
+def test_thats_not_directly_related_to_anything():
+    assert 3 == 2 + 1, "Not equal"
 
-@example.test
-def test2(example):
-    assert example(3, 4) == 7, f"Incorrect result, should give 7, gave {example(3, 4)}"
 
 print(test(all_tests))
-
